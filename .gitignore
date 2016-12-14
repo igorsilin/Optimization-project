@@ -4,3 +4,5 @@
 *.out
 *.gz
 *.snm
+*.nav
+*.toc
