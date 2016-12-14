@@ -58,7 +58,7 @@ def save_labels(labels, name): #draw graph and save figure
 
     return
 
-# Draws a graph
+# Draws a graph and saves a figure
 # Vertices with the same labels have the same colors
 def visualize_clusters(adjacency_matrix, labels_pred, labels_true, title):
     
@@ -89,6 +89,7 @@ def visualize_clusters(adjacency_matrix, labels_pred, labels_true, title):
     
     fig.subplots_adjust(wspace=0.2, hspace=1.0,
                     top=0.9, bottom=0.05, left=0, right=1)
-    plt.show()
+    #plt.show()
+    plt.savefig(title, dpi=300)
     
     return
