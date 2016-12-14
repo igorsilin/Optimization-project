@@ -105,14 +105,89 @@
 
 	\section{Algorithms}
 		\subsection{Spectral method}
-			\begin{frame}{Spectral method}
-				\begin{block}{Formulating an optimization problem}
-				\end{block}
-			\end{frame}
+			\begin{frame}{Subsets and Cuts}
 
-			\begin{frame}{Spectral method}
-				
-			\end{frame}
+\begin{block}{Measuring sizes of subsets}
+
+Let $V_{1},\dots,V_{k}$ be subsets of vertices. Then:
+
+\begin{itemize}
+
+\item $|V_{i}| = \{\text{number of vertices in $V_{i}$}\}$
+
+\item $vol(V_{i}) = \sum \limits_{i \in V_{i}}d_{i}$
+
+\end{itemize}
+
+\end{block}
+
+\begin{block}{MinCut}
+
+Define $W(S_1,S_2):= \sum \limits_{i \in S_1,j \in S_2}  a_{ij}.$ Then the MinCut problem is:
+
+\[
+cut(V_1,\dots,V_k) = \frac{1}{2}\sum\limits_{i=1}^kW(V_i,\overline{V_i}) \rightarrow \min \limits_{V_1,\dots,V_k}
+\]
+\end{block}
+
+\end{frame}		
+
+\begin{frame}{Balancing Cuts}
+
+\begin{block}{RatioCut and Normalized Cut}
+
+The MinCut solution separates one individual vertex from the rest. The following objectives are considered:
+
+\[
+RatioCut(V_1,\dots,V_k) = \sum \limits_{i=1}^k \frac{cut(V_i,\overline{V_i})}{|V_{i}|} \rightarrow \min \limits_{V_1,\dots,V_k}
+\]
+
+\[
+Ncut(V_1,\dots,V_k)= \sum \limits_{i=1}^k \frac{cut(V_i,\overline{V_i})}{vol(V_{i})} \rightarrow \min \limits_{V_1,\dots,V_k}
+\]
+
+\end{block}
+
+Balancing conditions lead to NP-hard problem. Spectral clustering is a way to solve relaxed versions of those problems
+
+\end{frame}
+
+\begin{frame}{Relaxed problem}
+
+\begin{block}{Types of Laplacians}
+
+\begin{itemize}
+
+\item Unnormilized Laplacian: $L=D-A$
+
+\item Symmetric Laplacian: $L_{sym} =D^{-\frac{1}{2}}LD^{-\frac{1}{2}}=I-D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$
+
+\item Random walk Laplacian: $L_{rw} =D^{-1}L=I-D^{-1}A$
+
+\end{itemize}
+
+\end{block}
+
+\begin{block}{Idea}
+
+\begin{itemize}
+
+\item Solving relaxed problem is equivalent to considering eigenvectors corresponding to $k$ smallest eigenvalues of Laplacian that describe cluster properties of given graph
+
+\end{itemize}
+
+\end{block}
+
+\begin{block}
+
+\begin{itemize}
+\item Ulrike von Luxburg <<A Tutorial on Spectral Clustering>>, 2007
+
+\end{itemize}
+
+\end{block}
+
+\end{frame}
 
 		\subsection{Modularity-based method}
 			\begin{frame}{Modularity-based method}
