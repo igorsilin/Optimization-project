@@ -69,28 +69,83 @@
 		  ]
 	\end{frame}
 
-		\AtBeginSection[]
-		{
-		  \begin{frame}{Plan of the following section}
-		  \tableofcontents[
-		    currentsection,
-		    sectionstyle=show/shaded,
-		    subsectionstyle=show/show/shaded
-		  ]
-		  \end{frame}
-		}
+		% \AtBeginSection[]
+		% {
+		%   \begin{frame}{Plan of the following section}
+		%   \tableofcontents[
+		%     currentsection,
+		%     sectionstyle=show/shaded,
+		%     subsectionstyle=show/show/shaded
+		%   ]
+		%   \end{frame}
+		% }
 	
-	\section{Introduction}
+	\section{Introduction to community detection}
 
-		\subsection{Notation}
-			\begin{frame}{Notation}
-				\begin{block}{Graph}
-					\begin{itemize}
-					\item $G = (\mathcal{V}, \mathcal{E})$ --- undirected unweighted graph with $p$ nodes and node degrees $\leq d$;\; $\mathcal{G}_{p,d}$ --- space of all such graphs.
-					\item $\mathcal{V}$ --- set of nodes, $|\mathcal{V}| = p$; \;\;\;$\mathcal{E}$ --- set of edges.
-					\item node $i \in \mathcal{V} \rightarrow$ set of neighbors $\partial i \subseteq \mathcal{V} \setminus \{i\}$.
-					\end{itemize}
+			\begin{frame}{Example}
+				\vspace{-17pt}
+				\center{\includegraphics[width=1.0\linewidth]{images//communities.png}}
+			\end{frame}
+		
+			\begin{frame}{Notations}
+
+			\begin{block}{Assumption}
+				We consider \textbf{undirected unweighted} graphs \textbf{without loops} with $n$ nodes.
+				The nodes are enumerated as $\{ 1, ..., n\}$.\\
+				Graph is given by its $n \times n $ adjacency matrix $A$.
+
+			\end{block}
+
+			\begin{block}{Goal of community detection}
+				Find \textbf{partition} of nodes into \textbf{non-overlapping} clusters.\\
+				The number of clusters is $k$.\\
+				The clusters are denoted as $\{ \mathcal{C}_1, ..., \mathcal{C}_k\}$.
+			\end{block}
+		\end{frame}
+
+	\section{Algorithms}
+		\subsection{Spectral method}
+			\begin{frame}{Spectral method}
+				\begin{block}{Formulating an optimization problem}
 				\end{block}
 			\end{frame}
+
+			\begin{frame}{Spectral method}
+				
+			\end{frame}
+
+		\subsection{Modularity-based method}
+			\begin{frame}{Modularity-based method}
+				\begin{block}{Formulating an optimization problem}
+				\end{block}
+			\end{frame}
+
+			\begin{frame}{Modularity-based method}
+				
+			\end{frame}
 	
+		\subsection{Conjugate gradients method}
+			\begin{frame}{Conjugate gradients method}
+				\begin{block}{Formulating an optimization problem}
+				\end{block}
+			\end{frame}
+
+			\begin{frame}{Conjugate gradients method}
+				
+			\end{frame}
+
+		\subsection{Semidefinite relaxations}
+			\begin{frame}{Semidefinite relaxations}
+				\begin{block}{Formulating an optimization problem}
+				\end{block}
+			\end{frame}
+
+			\begin{frame}{Semidefinite relaxations}
+				
+			\end{frame}
+
+	\section{Experimental results}
+		\begin{frame}{}
+				
+		\end{frame}
 \end{document}
