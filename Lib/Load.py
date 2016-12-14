@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import networkx as nx
 
 def download_graph(filename):
     f = open('Data/'+filename+'.txt', "r")
@@ -54,4 +56,39 @@ def save_labels(labels, name): #draw graph and save figure
     for i in xrange(n_nodes):
         f.write(str(labels[i]) + '\n')
 
+    return
+
+# Draws a graph
+# Vertices with the same labels have the same colors
+def visualize_clusters(adjacency_matrix, labels_pred, labels_true, title):
+    
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
+
+    G = nx.from_numpy_matrix(adjacency_matrix)
+    pos = nx.spring_layout(G)
+    
+    nodes = [i for i in G.nodes()]
+    
+    colors_pred = np.array(labels_pred)
+    colors_pred = colors_pred / np.max(colors_pred)
+    
+    colors_true = np.array(labels_true)
+    colors_true = colors_true / np.max(colors_true)
+    
+    nx.draw_networkx_nodes(G, pos, nodes, ax=ax[0], node_size=100, cmap=plt.get_cmap('rainbow'), node_color = colors_pred)
+    nx.draw_networkx_edges(G, pos, G.edges(), ax=ax[0])
+    
+    nx.draw_networkx_nodes(G, pos, nodes, ax=ax[1], node_size=100, cmap=plt.get_cmap('rainbow'), node_color = colors_true)
+    nx.draw_networkx_edges(G, pos, G.edges(), ax=ax[1])
+    
+    ax[0].set_title(title + ', predicted labels')
+    ax[1].set_title(title + ', true labels')
+    
+    ax[0].axis('off')
+    ax[1].axis('off')
+    
+    fig.subplots_adjust(wspace=0.2, hspace=1.0,
+                    top=0.9, bottom=0.05, left=0, right=1)
+    plt.show()
+    
     return
