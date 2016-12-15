@@ -132,8 +132,8 @@ def compute_modularity(labels_pred, edge_list):
 
 def compute_normalized_cut(labels_pred, clusters_pred, edge_list):
 
-    res = [0.0]*(len(clusters_pred))
-    vol = [0.0]*(len(clusters_pred))
+    res = [0.0]*(len(labels_pred))
+    vol = [0.0]*(len(labels_pred))
     for i in xrange(len(edge_list)):
         vol[labels_pred[edge_list[i][0]]] += 1
         vol[labels_pred[edge_list[i][1]]] += 1
@@ -142,7 +142,7 @@ def compute_normalized_cut(labels_pred, clusters_pred, edge_list):
             res[labels_pred[edge_list[i][1]]] += 1
 
     normcut = 0.0
-    for i in xrange(len(clusters_pred)):
+    for i in xrange(len(labels_pred)):
         if (vol[i] != 0):
             normcut += res[i]/vol[i]
         
