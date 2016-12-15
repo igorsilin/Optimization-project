@@ -105,14 +105,51 @@
 
 	\section{Algorithms}
 		\subsection{Spectral method}
-			\begin{frame}{Spectral method}
-				\begin{block}{Formulating an optimization problem}
+			\begin{frame}{Subsets and Cuts}
+				\begin{block}{Measuring sizes of subsets}
+					Let $\mathcal{C}_{1},\dots,\mathcal{C}_{k}$ be subsets of vertices. Then:
+					\begin{itemize}
+						\item $|\mathcal{C}_{i}| = \{\text{number of vertices in $\mathcal{C}_{i}$}\}$
+						\item $vol(\mathcal{C}_{i}) = \sum \limits_{i \in \mathcal{C}_{i}}d_{i}$
+					\end{itemize}
 				\end{block}
-			\end{frame}
+				\begin{block}{MinCut}
+					Define $W(\mathcal{C}_p,\mathcal{C}_q):= \sum \limits_{i \in \mathcal{C}_p,j \in C_q}  a_{ij}.$ Then MinCut problem is:
+\[
+cut(\mathcal{C}_1,\dots,\mathcal{C}_k) = \frac{1}{2}\sum\limits_{i=1}^kW(\mathcal{C}_i,\overline{\mathcal{C}_i}) \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
+				\end{block}
+			\end{frame}		
+		\begin{frame}{Balancing Cuts}
+				\begin{block}{RatioCut and Normalized Cut}
+					The MinCut solution separates one individual vertex from the rest. The following objectives are considered:
+\[
+RatioCut(\mathcal{C}_1,\dots,\mathcal{C}_k) = \sum \limits_{i=1}^k \frac{cut(\mathcal{C}_i,\overline{\mathcal{C}_i})}{|\mathcal{C}_{i}|} \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
 
-			\begin{frame}{Spectral method}
-				
+\[
+Ncut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\mathcal{C}_i,\overline{\mathcal{C}_i})}{vol(\mathcal{C}_{i})} \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
+			\end{block}
+				Balancing conditions lead to NP-hard problem. Spectral clustering is a way to solve relaxed versions of those problems
 			\end{frame}
+		 	\begin{frame}{Relaxed problem}
+				\begin{block}{Types of Laplacians}
+					\begin{itemize}
+						\item Unnormilized Laplacian: $L=D-A$
+						\item Symmetric Laplacian: $L_{sym} =D^{-\frac{1}{2}}LD^{-\frac{1}{2}}=I-D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$
+						\item Random walk Laplacian: $L_{rw} =D^{-1}L=I-D^{-1}A$
+					\end{itemize}
+				\end{block}
+				\begin{block}{Idea}
+					\begin{itemize}
+						\item Solving relaxed problem is equivalent to considering eigenvectors corresponding to $k$ smallest eigenvalues of Laplacian that describe cluster properties of given graph
+					\end{itemize}
+				\end{block}
+				\begin{block}{Related paper}
+					Ulrike von Luxburg <<A Tutorial on Spectral Clustering>>, 2007
+				\end{block}
+			\end{frame}	
 
 		\subsection{Modularity-based method}
 			\begin{frame}{Modularity-based method}
