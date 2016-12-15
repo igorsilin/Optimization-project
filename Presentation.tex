@@ -124,35 +124,40 @@
 				
 			\end{frame}
 	
-		%\subsection{Conjugate gradients method}
+        %\subsection{Conjugate gradients method}
         \subsection{Natural conjugate gradients method}
 			\begin{frame}{Natural conjugate gradients method} %{Conjugate gradients method}
-                Bayesian approach:
-                \begin{equation}
-                    \begin{aligned}
-                    \nonumber
-                        & Z_i \sim \text{Poly}(\pi), \quad i=\overline{1, n} \\
-                        & \pi \sim \text{Dirichlet}(\alpha) \\
-                        & P_{ii} \sim \text{Beta}(\beta), \quad i = \overline{1,k} \\
-                    \end{aligned}
-                \end{equation}
-                \begin{equation}
-                    \begin{aligned}
-                    \nonumber
-                        & p(Z, \pi, P | A) - \text{true posterior} \\
-                        & \mathcal Q = \left\{ q:\, q(Z, \pi, P) = q(\pi)q(P) \prod\limits_i q(Z_i) \right\} - \text{feasible distributions} \\
-                    \end{aligned}
-                \end{equation}
+                \begin{itemize}
+                    \item Model parametrized by
+                        \begin{equation}
+                            \begin{aligned}
+                            \nonumber
+                                & z(i) \sim \text{Poly}(\pi), \quad i=\overline{1, n} \\
+                                & P = \| p_{ij} \|_{i,j=\overline{1,k}} \text{ - probabilities of inter-cluster edges occurence} \\
+                            \end{aligned}
+                        \end{equation}
+                
+                    \item Bayesian approach:
+                    \begin{equation}
+                        \begin{aligned}
+                        \nonumber
+                            & \pi \sim \text{Dirichlet}(\alpha) \\
+                            & p_{ii} \sim \text{Beta}(\beta), \quad i = \overline{1,k} \\
+                            & p_{ij} \ll 1, \quad \forall i\neq j
+                        \end{aligned}
+                    \end{equation}
+                    \item $p(z, \pi, P | A)$ - true posterior with observed adjacency matrix $A$
+                    \item $\mathcal Q$ - family of feasible distributions            
+                \end{itemize}
 
+			\end{frame}
 
+			\begin{frame}{Natural conjugate gradients method} %{Conjugate gradients method}
 				\begin{block}{Formulating an optimization problem}
                     \begin{equation*}
                         \mathcal L(q) \equiv -\text{KL}\left(q \| p(Z, \pi, P | A)\right) \longrightarrow \max\limits_{q \in \mathcal Q}
                     \end{equation*}
 				\end{block}
-			\end{frame}
-
-			\begin{frame}{Natural conjugate gradients method} %{Conjugate gradients method}
                 \begin{itemize}
 				    \item The problem can be reduced to unconstrained optimization:
 
