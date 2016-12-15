@@ -1,0 +1,123 @@
+
+\numberwithin{equation}{subsection}
+
+ Here we discuss methods proposed in \cite{spectral}. The intuition behind of clustering is to separate points in different groups according to their similarities. The initial problem can be restated as a graph partitioning problem: one wants to find a partition of the graph such that there are not many edges between different clusters (which means that points in different clusters are dissimilar from each other) and there are many edges within one cluster (which means that points within the same cluster are similar to each other). Spectral clustering can be derived as an approximation to such graph partitioning problems.
+ 
+But before we need to make simple notations. Two ways of measuring size of clusters are considered:
+					\begin{itemize}
+						\item $|\mathcal{C}_{i}| = \{\text{number of vertices in $\mathcal{C}_{i}$}\}$
+						\item $vol(\mathcal{C}_{i}) = \sum \limits_{i \in \mathcal{C}_{i}}d_{i}$
+					\end{itemize} 
+
+where $d_i$ denotes the degree of vertex $i$. Define also:
+
+\[
+W(\mathcal{C}_p,\mathcal{C}_q):= \sum \limits_{i \in \mathcal{C}_p,j \in C_q}  a_{ij}\]
+
+Then the simplest and most direct way to construct a partition of the graph is to solve the MinCut problem. In other words, one solves the following optimization problem:
+
+\[
+cut(\mathcal{C}_1,\dots,\mathcal{C}_k) = \frac{1}{2}\sum\limits_{i=1}^kW(\mathcal{C}_i,\overline{\mathcal{C}_i}) \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
+
+In case of $k=2$ the problem is easy to solve. However, in practice MinCut often does not lead to satisfactory partitions. The problem is that in many cases, the solution of MinCut simply separates one individual vertex from the rest of the graph. Of course this is not what is wanted to achieve in clustering, as clusters should be reasonably large groups of points. The two most common objective functions to encode this are the following:
+
+\[
+RatioCut(\mathcal{C}_1,\dots,\mathcal{C}_k) = \sum \limits_{i=1}^k \frac{cut(\mathcal{C}_i,\overline{\mathcal{C}_i})}{|\mathcal{C}_{i}|} \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
+
+\[
+Ncut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\mathcal{C}_i,\overline{\mathcal{C}_i})}{vol(\mathcal{C}_{i})} \rightarrow \min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k}
+\]
+
+Unfortunately, introducing balancing conditions makes the previously simple to solve MinCut problem become NP hard. Hence, several relaxation techniques are proposed to solve such problems. Spectral clustering is one of the ways. Relaxing Ncut leads to normalized spectral clustering, while relaxing RatioCut leads to unnormalized spectral clustering. In \cite{spectral} it is described how to write decribed above problems as trace minimization problems. As an example, consider $RatioCut$ minimization problem. Given a partition of vertices $V=\{v_1,\dots,v_n\}$ into $k$ sets $\mathcal{C}_1,\dots,\mathcal{C}_k$, authors introduce $k$ indicator vectors $h_j = (h_{1,j},\dots,h_{n,j})^T$ as:
+\[
+h_{i,j} = \begin{cases}
+\frac{1}{\sqrt{|\mathcal{C}_j|}} & \text{if $v_i \in \mathcal{C}_j$}\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+The matrix $H$ is the matrix that contains those $k$ indicator vectors as columns. Then the equivalent problem is written as:
+
+\[
+\min \limits_{\mathcal{C}_1,\dots,\mathcal{C}_k} Tr(H^TLH) \
+s.t. \ H^TH=I, \ H \text{ - defined above}
+\]
+
+Now the problem is relaxed by allowing the entries of the matrix $H$ to take arbitrary real values. Then the relaxed problem becomes easy:
+
+\[
+\min \limits_{H \in \mathbb{R}^{n \times k}} Tr(H^TLH) \
+s.t. \ H^TH=I
+\]
+
+Some theory behind tells that the solution is given by choosing $H$ as the matrix which contains the first $k$ eigenvectors of $L$ as columns. To re-convert the real valued solution matrix to a discrete partition standard way is to apply the $k$-means algorithms on the rows of $H$. Similar technique is provided for approximating $Ncut$ (but here one obtains normalized Laplacian). Another way to explain spectral clustering is based on random walks on the graph. A random walk on a graph is a stochastic process which randomly jumps from vertex to vertex. In the paper it is shown that spectral clustering can be interpreted as trying to find a partition of the graph such that the random walk stays long within the same cluster and seldom jumps between clusters. Finally, one obtains three possible algorithms to provide spectral clustering:
+
+\begin{algorithm}[H]
+    \caption{Unnormalized Spectral Clustering}
+    \label{ncg_alg}
+	\SetAlgoLined
+
+	\KwIn{adjacency matrix $A$, number of clusters $k$} %% здесь можно указать исходные параметры
+	\KwOut{clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$} %% результат работы программы
+	Given adjacency matrix $A$, compute its Laplacian $L$\\
+	
+	Compute the first $k$ eigenvectors $u_1, \dots , u_k$ of $L$. Let $U \in \mathbb{R}^{n\times k}$ be the matrix containing the vectors $u_1 , \dots, u_k$ as columns\\
+		
+    \For{$i = 1,\dots,n$}
+    {
+        Let $y_i \in \mathbb{R}^k$ be the vector or the $i$-th row of $U$
+    }
+
+	Cluster the points $(y_i),i=1,\dots,n$ with the $k$-means algorithm into clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$
+
+    \Return $\mathcal{C}_1,\dots,\mathcal{C}_k$	
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+    \caption{Normalized Spectral Clustering with $L_{rw}$}
+    \label{ncg_alg}
+	\SetAlgoLined
+
+	\KwIn{adjacency matrix $A$, number of clusters $k$} %% здесь можно указать исходные параметры
+	\KwOut{clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$} %% результат работы программы
+	Given adjacency matrix $A$, compute its normalized Laplacian $L_{rw}$\\
+	
+	Compute the first $k$ eigenvectors $u_1, \dots , u_k$ of $L_{rw}$. Let $U \in \mathbb{R}^{n\times k}$ be the matrix containing the vectors $u_1 , \dots, u_k$ as columns\\
+		
+    \For{$i = 1,\dots,n$}
+    {
+        Let $y_i \in \mathbb{R}^k$ be the vector or the $i$-th row of $U$
+    }
+
+	Cluster the points $(y_i),i=1,\dots,n$ with the $k$-means algorithm into clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$
+
+    \Return $\mathcal{C}_1,\dots,\mathcal{C}_k$	
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \caption{Normalized Spectral Clustering with $L_{sym}$}
+    \label{ncg_alg}
+	\SetAlgoLined
+
+	\KwIn{adjacency matrix $A$, number of clusters $k$} %% здесь можно указать исходные параметры
+	\KwOut{clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$} %% результат работы программы
+	Given adjacency matrix $A$, compute its normalized Laplacian $L_{sym}$\\
+	
+	Compute the first $k$ eigenvectors $u_1, \dots , u_k$ of $L$. Let $U \in \mathbb{R}^{n\times k}$ be the matrix containing the vectors $u_1 , \dots, u_k$ as columns\\
+
+Form the matrix $T \in \mathbb{R}^{n\times k}$ from $U$ by normalizing the rows to $l_1$-norm\\		
+		
+    \For{$i = 1,\dots,n$}
+    {
+        Let $t_i \in \mathbb{R}^k$ be the vector or the $i$-th row of $T$
+    }
+
+	Cluster the points $(t_i),i=1,\dots,n$ with the $k$-means algorithm into clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$
+
+    \Return $\mathcal{C}_1,\dots,\mathcal{C}_k$	
+\end{algorithm}
+
+Several comments about this derivation of spectral clustering should be made. Firstly, there is no guarantee whatsoever on the quality of the solution of the relaxed problem compared to the exact solution. Secondly, the relaxations discussed are not unique.  The reason why the spectral relaxation is so appealing is not that it leads to particularly good solutions. Its popularity is mainly due to the fact that it results in a standard linear algebra problem which is simple to solve.
