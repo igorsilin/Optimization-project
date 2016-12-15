@@ -37,8 +37,8 @@
 \newtheorem{prob}{Problem}
 \def\eqdef{\stackrel{def}{=}}
 
-% \DeclareMathOperator*{\argmin}{argmin} 
-% \DeclareMathOperator*{\Argmin}{Argmin} 
+% \DeclareMathOperator*{\argmin}{argmin}
+% \DeclareMathOperator*{\Argmin}{Argmin}
 % \DeclareMathOperator{\barcnt}{bar}
 % \DeclareMathOperator{\supp}{supp}
 % \DeclareMathOperator{\est}{\mathbb{E}}
@@ -53,7 +53,7 @@
 			{ Course project \\ <<Optimization approaches to community detection>>}
 	\author[Igor Silin]{\large Marina Danilova, Alexander Podkopaev, Nikita Puchkin, Igor Silin}
 	\institute[Affiiation]{
-	\textsc{Skolkovo institute of science and technology} 
+	\textsc{Skolkovo institute of science and technology}
 	}
 
 \date{\footnotesize{December 16, 2016}}
@@ -124,14 +124,51 @@
 				
 			\end{frame}
 	
-		\subsection{Conjugate gradients method}
-			\begin{frame}{Conjugate gradients method}
+		%\subsection{Conjugate gradients method}
+        \subsection{Natural conjugate gradients method}
+			\begin{frame}{Natural conjugate gradients method} %{Conjugate gradients method}
+                Bayesian approach:
+                \begin{equation}
+                    \begin{aligned}
+                    \nonumber
+                        & Z_i \sim \text{Poly}(\pi), \quad i=\overline{1, n} \\
+                        & \pi \sim \text{Dirichlet}(\alpha) \\
+                        & P_{ii} \sim \text{Beta}(\beta), \quad i = \overline{1,k} \\
+                    \end{aligned}
+                \end{equation}
+                \begin{equation}
+                    \begin{aligned}
+                    \nonumber
+                        & p(Z, \pi, P | A) - \text{true posterior} \\
+                        & \mathcal Q = \left\{ q:\, q(Z, \pi, P) = q(\pi)q(P) \prod\limits_i q(Z_i) \right\} - \text{feasible distributions} \\
+                    \end{aligned}
+                \end{equation}
+
+
 				\begin{block}{Formulating an optimization problem}
+                    \begin{equation*}
+                        \mathcal L(q) \equiv -\text{KL}\left(q \| p(Z, \pi, P | A)\right) \longrightarrow \max\limits_{q \in \mathcal Q}
+                    \end{equation*}
 				\end{block}
 			\end{frame}
 
-			\begin{frame}{Conjugate gradients method}
-				
+			\begin{frame}{Natural conjugate gradients method} %{Conjugate gradients method}
+                \begin{itemize}
+				    \item The problem can be reduced to unconstrained optimization:
+
+                        \begin{equation}
+                            \begin{aligned}
+                            \nonumber
+                            \mathcal L = \mathcal L(\theta) \longrightarrow \max, \quad \text{$\theta$ - $n\times(k-1)$ matrix}
+                            \end{aligned}
+                        \end{equation}
+
+                    \item Use conjugate gradients method in a statistical manifold
+                    \item Metrics is defined by a matrix
+                        \[
+                            \mathcal I(\theta) - \text{Fischer information}
+                        \]
+                \end{itemize}                
 			\end{frame}
 
 		\subsection{Semidefinite relaxations}
@@ -148,4 +185,4 @@
 		\begin{frame}{}
 				
 		\end{frame}
-\end{document}
+\end{document} 
