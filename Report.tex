@@ -30,33 +30,86 @@
 \maketitle
 
 \section{Introduction to community detection}
+Wide range of real-life objects can be represented in terms of graphs. When working with graphs, it may be very useful to find groups of nodes, such that there are much more edges within these groups, than between groups. Such groups are called clusters or communities, and the problem of finding these groups is called community detection. A lot of algorithms for community detection were developed and huge part of them uses optimization method. In this work we want to present a number of methods, that allows to reduce the community detection problem to an optimization problem.
 
+Let's introduce some notations.
+We consider undirected unweighted graphs without loops with $n$ nodes and $m$ edges.
+The nodes are enumerated as $\{ 1, ..., n\}$. 
+Graph is given by its $n \times n $ adjacency matrix $A$.
+Degree of the node $i$ is $d_i$. 
+
+The number of clusters is $k$ (some algorithms require to specify this number).
+The clusters are denoted as $\{ \mathcal{C}_1, ..., \mathcal{C}_k\}$.
+Cluster sizes are $ |\mathcal{C}_1|, ..., |\mathcal{C}_k|$.
+Sometimes it's convenient to describe cluster structure in terms of labeling $z$: $z(i)$ is the cluster containing node $i$, i.e. $i \in \mathcal{C}_{z(i)}$.
+				
 \section{Stochastic block model}
+	In this section we discuss the stochastic block model, which is common widely used tool for generating graphs with special structure.
+	Some of the algorithms that we used (natural conjugate gradients method, semidefinite relaxation method) works exactly with this model.
+		
+		Again we consider a graph with $n$ nodes.
+		Suppose we want to create some graph with $k$ clusters. 
+		Let the structure be given by labeling $z: \{ 1,...,n\} \rightarrow \{ 1,...,k\}$.
+		Also we introduce a symmetric matrix of inter-cluster probabilities $P = ||P_{ij}||_{i,j = 1}^k \in [0; 1]^{k\times k}$. Elements of this matrix give probability with which an edge between vertex of one cluster and vertex of another or the same cluster is generated.
+		
+		Using labeling $z$ and inter-cluster probabilities $P$ we can construct SBM parameter matrix $\theta$:
+		
+		\begin{equation}
+		\begin{aligned}
+		\theta_{ij} = P_{z(i)\;z(j)}\;\;\forall i \neq j, \;\;\;\;\theta_{ii} = 0\;\;\forall i.
+		\nonumber
+		\end{aligned}
+		\end{equation}
+		Element $\theta_{ij}$ means the probability of generating an edge between $i$-th and $j$-th nodes.
+		So a graph, or more specifically its adjacency matrix $A$, is generated in the following way:
+		\begin{equation} \label{eq}
+		\begin{aligned}
+		a_{ij} \sim Bernoulli(\theta_{ij}) ,\; a_{ji} = a_{ij} \;\; \forall i > j,\;\;\;\;\;a_{ii} = 0\;\; \forall i,
+		\end{aligned}
+		\end{equation}
+		where all $A_{ij}$ are independent.
+		In this work we consider unweighted undirected graph without self-loops.
+
+		The goal of community detection is to reconstruct labeling $z$, while also one can be interested in estimation of parameter matrix $\theta = [\theta_{ij}]_{i,j=1}^n$. In order to find this structure, we use only given graph.
+		
+		As an example, take a look on the simplest case with two clusters ($k = 2$). Let these clusters be of equal size $n/2$. Also suppose that an edge between two nodes of the same cluster appears with probability $a$ while an edge between two nodes of different clusters appears with probability $b$, where $a > b$.
+		Described case corresponds to the following labeling $z$ and inter-cluster probabilities $P$:
+		\begin{equation}
+		\begin{aligned}
+		z = [\underbrace{1, ..., 1}_{n/2}, \underbrace{2, ..., 2}_{n/2}]^T, \;\;\; P = \begin{bmatrix} a & b \\ b & a \end{bmatrix}.
+		\nonumber
+		\end{aligned}
+		\end{equation}
+		One can easily construct SBM parameter matrix $\theta$ based on $z$ and $P$. Now the graph generating process is clear.
 
 \section{Algorithms}
 	
 	\subsection{Semidefinite relaxations}
-	%\subsection{Conjugate gradients method}
 	\subsection{Natural conjugate gradients method}
 		\input{ncg}
 	\subsection{Modularity-based methods}
+		\input{modularity}
 	\subsection{Spectral method}
 
 \section{Data}
 
+	In our experiments we consider standard real-world graphs that are often used for testing community detection algorithms, such as ''Zachary's karate club'', ''American college football'', ''Books about US politics''. For this graphs we know true clusters. The description of these graphs can be found in internet.
+
+	We have generated several artificial graphs using stochastic block model as well.
+
 \section{Experimental results}
+	We launch all described algorithms on our graphs and compare their performance using different metrics, such as: NMI, F1-score, Ratio cut, Modularity.
+
 
 \section{Work split}
 
-
-%\section{References}
-%     $[1]$  A low-rank approach to the computation of path integrals. M.S. Litsarev, I.V. Oseledets, 2015.\\
-%     $[2]$ Karl Sigman notes, 2006.\\
 
 \renewcommand{\refname}{References}
 \begin{thebibliography}{9}
     \bibitem{ncg}
     A fast inference algorithm for stochastic blockmodel, Zhiqiang Xu, Yiping Ke, Yi Wang, 2014. \\
+    \bibitem{modularity}
+    Fast algorithm for detecting community structure in networks, M.E.J.Newman, 2003.\\
 \end{thebibliography}
 
 \end{document}

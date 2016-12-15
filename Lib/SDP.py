@@ -26,7 +26,7 @@ def SDP1(n_nodes, A, n_clusters):
 
 			current_cluster += 1
 
-	return labels_pred, X
+	return labels_pred
 
 
 def SDP2(n_nodes, A, n_clusters):
@@ -55,4 +55,4 @@ def SDP2(n_nodes, A, n_clusters):
 
 			current_cluster += 1
 
-	return labels_pred, X
+	return labels_pred

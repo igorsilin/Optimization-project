@@ -1,0 +1,86 @@
+%\numberwithin{equation}{subsection}
+In this subsection we discuss the method described in \cite{modularity}.
+The method is based on the concept of modularity. To introduce it, we first of all compute the fraction of edges which lie within communities:
+    \begin{equation}
+        \begin{aligned}
+            \frac{1}{2m} \sum\limits_{i,j=1}^{n} a_{ij} \cdot \mathbbm{1}\{ z(i) = z(j) \}.
+        \nonumber
+        \end{aligned}
+    \end{equation}
+We are also interested in the expected number with respect to the configuration model. The configuration model is a randomized realization of a particular network. Given a network with $n$ nodes, where each node $i$ has a node degree $d_i$, the configuration model cuts each edge into two halves, and then each half edge, called a stub, is rewired randomly with any other stub in the network even allowing self loops. Thus, even though the node degree distribution of the graph remains intact, the configuration model results in a completely random network and the expected fraction of edges which lie within communities:
+    \begin{equation}
+        \begin{aligned}
+            \sum\limits_{i,j=1}^{n}\frac{d_i}{2m}\frac{d_j}{2m} \cdot \mathbbm{1}\{ z(i) = z(j) \}.
+            \nonumber
+        \end{aligned}
+    \end{equation}
+Finally, \textbf{Modularity} is the difference between two previous fractions:
+    \begin{equation}
+        \begin{aligned}
+            Q(z) = 
+            \frac{1}{2m} \sum\limits_{i,j=1}^{n} \left(a_{ij} - \frac{d_i\cdot d_j}{2m}\right) \cdot \mathbbm{1}\{ z(i) = z(j) \}.
+        \nonumber
+        \end{aligned}
+    \end{equation}
+Modularity can take values in interval $[-1/2;\;1)$.
+When modularity is large, it means that the network is far from its average state and there the density of edges within communities is higher.
+But finding exact maximum of modularity is NP-hard problem because we need to search through exponential number of clusterings.
+So, the goal of modularity-based algorithms is to approximately maximize modularity over all possible partitions of the graph.
+
+Different ideas for maximization can be used, but we focus on simple greedy algorithm. To apply this method, it will be more convinient for us to rewrite the definition of modularity in the following form:
+ \begin{equation}
+    \begin{aligned}
+    Q = \sum\limits_{q=1}^{k} e_{{\mathcal{C}_q}{\mathcal{C}_q}} - b^2_{\mathcal{C}_q}, 
+    \nonumber
+    \end{aligned}
+\end{equation}
+where 
+\[
+    e_{{\mathcal{C}_q}{\mathcal{C}_p}} = \frac{1}{2m} \sum\limits_{i,j=1}^{n} a_{ij} \cdot \mathbbm{1}\{ i \in {\mathcal{C}_q}, j \in {\mathcal{C}_p}\}
+\]
+and 
+\[
+b_{\mathcal{C}_q} = \sum\limits_{p=1}^{k} e_{{\mathcal{C}_q}{\mathcal{C}_p}}.
+\]
+One can easily check that this formulation is equivalent to the previous one.
+
+Now let's describe the idea of the greedy maximization of the modularity for given graph.
+Initially we put each node in its own cluster, i.e. $\forall i \rightarrow \mathcal{C}^{(0)}_i = \{ i \}$.
+Then we start our iterations. On $t$-th iteration we look at current clusters $\mathcal{C}^{(t-1)}_q$ and look for a pair of clusters, union of which gives us the maximal gain $\Delta Q$ of modularity. 
+Namely, if we join clusters ${\mathcal{C}^{(t-1)}_q}$ and ${\mathcal{C}^{(t-1)}_p}$ together and form new cluster $\mathcal{C}^{(t)}_{(qp)}$ and leave all other clusters as they are, i.e. $\mathcal{C}^{(t)}_s = \mathcal{C}^{(t-1)}_s \; \forall s\neq q,p$, then $e$ and $b$ can be recalculated as follows:
+\begin{equation}
+    \begin{aligned}
+        & e_{\mathcal{C}^{(t)}_{(qp)} \mathcal{C}^{(t)}_s} = e_{{\mathcal{C}^{(t-1)}_q}{\mathcal{C}^{(t-1)}_s}} + e_{{\mathcal{C}^{(t-1)}_p}{\mathcal{C}^{(t-1)}_s}} \;\; \forall s \neq q,p,\\
+        & e_{\mathcal{C}^{(t)}_{(qp)} \mathcal{C}^{(t)}_{(qp)}} = e_{{\mathcal{C}^{(t-1)}_q}{\mathcal{C}^{(t-1)}_q}} +
+        e_{{\mathcal{C}^{(t-1)}_p}{\mathcal{C}^{(t-1)}_p}} + e_{{\mathcal{C}^{(t-1)}_q}{\mathcal{C}^{(t-1)}_p}} + e_{{\mathcal{C}^{(t-1)}_p}{\mathcal{C}^{(t-1)}_q}},\\
+        & b_{\mathcal{C}^{(t)}_{(qp)}} = b_{\mathcal{C}^{(t-1)}_{q}} + b_{\mathcal{C}^{(t-1)}_{p}}.
+    \nonumber
+    \end{aligned}
+\end{equation}
+All other elements don't change. Hence, according to our formula for modularity we have:
+\begin{equation}
+    \begin{aligned}
+        &Q^{(t)} = Q^{(t-1)} + \Delta Q,\\
+        \Delta Q = 
+        &e_{{\mathcal{C}^{(t-1)}_q}{\mathcal{C}^{(t-1)}_p}} + e_{{\mathcal{C}^{(t-1)}_p}{\mathcal{C}^{(t-1)}_q}} 
+        - 2b_{\mathcal{C}^{(t-1)}_{q}}  b_{\mathcal{C}^{(t-1)}_{p}}.
+    \nonumber
+    \end{aligned}
+\end{equation}
+If we keep and recalculate all $e$ and $b$ during the iterations, we can determine pair of current clusters that gives maximal $\Delta Q$ effectively, since for any possible pair calculating $\Delta Q$ takes constant time (actually, more advanced approaches for more effective search of such pair were developed, e.g. one can use heap structure). So, we choose two clusters that we want to unite and unite them. We also have the value of modularity for current clustering. We also need to recalculate $e$ and $b$ as shown above.
+
+One can consider this sequential uniting of clusters as the process of building a dendrogarm, which is a tree, that shows in which order cluster were joined.
+
+After we did $(n-1)$ iterations, we have one cluster that contains all nodes. So as a final clustering we need to choose clustering from iteration $t$ with the maximal modularity $Q^{(t)}$.
+
+For technical details of implementation see code in ''Lib/modularity.py''.
+
+Advantages of this procedure are that it gives some partition in any case and doesn't require to specify the number of clusters that we are looking for. It's good, because in real-world problems we rarely know the exact number of communities that we want to detect. At the same time, there are no theoretical results that guarantee some good performance of the method.
+
+
+
+\begin{equation}
+    \begin{aligned}
+    \nonumber
+    \end{aligned}
+\end{equation}
