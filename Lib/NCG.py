@@ -11,9 +11,25 @@
 
 import scipy as sc
 from scipy import special
-from math import inf
+#from math import inf
 from math import isnan
+from Lib.Transformations import compute_adj_mat
+from Lib.Metrics import compute_modularity
 
+def NCG(n_nodes, edge_list, k, n_tests=40):
+
+    X = compute_adj_mat(n_nodes, edge_list)
+    #modularity_max = -inf
+    modularity_max = -1 * float('inf')
+    
+    for i in range(n_tests):
+        Z = NCG_Clustering(X, k, maxIter=100)
+        modularity = compute_modularity(Z, edge_list)
+        if ((modularity_max < modularity) and (modularity < 0.9)):
+            labels = Z
+            modularity_max = modularity
+            
+    return labels
 
 # Group assignment as maximum likelihood estimation
 # via natural conjugate gradient
@@ -31,9 +47,10 @@ def NCG_Clustering(X, k, tol=1e-6, maxIter=200):
     # Initial guess of parameter
     # Theta -- Nx(k-1) matrix,
     Theta = Initial_Guess(N, k)
-    
+    Theta_old = Theta
+
     # Old value of log-likelihood
-    L_old = -inf
+    L_old = -1. * float('inf')
     
     lambd = 1
     d = sc.zeros((N, k-1))
@@ -64,11 +81,12 @@ def NCG_Clustering(X, k, tol=1e-6, maxIter=200):
             # Calculate Natural Conjugent Gradient
             d, g_norm = Calculate_NCG(X, Pi, alpha, beta1, beta2, d, g_norm)
             # Update values
+            Theta_old = Theta
             Theta += lambd * d
             L_old = L
         else:
             lambd *= 0.5
-            Theta -= lambd * sc.absolute(eta) * d
+            Theta = Theta_old + lambd * sc.absolute(eta) * d
             
     # Cluster assignments
     Z = sc.argmax(Pi, axis=1)
