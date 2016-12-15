@@ -111,7 +111,7 @@ def compute_modularity(labels_pred, edge_list):
 	n_edges = len(edge_list)
 	m = 0.0   #finally m = sum w_ij
 	A = 0.0   
-	k = [0.0] * (len(set(labels_pred)))
+	k = [0.0] * (max(labels_pred)+1)
 	res = 0.0
 
 	for i in xrange(n_edges):
@@ -123,7 +123,7 @@ def compute_modularity(labels_pred, edge_list):
 		k[labels_pred[edge_list[i][0]]] += 1
 		k[labels_pred[edge_list[i][1]]] += 1
 
-	for i in xrange(len(set(labels_pred))):
+	for i in xrange((max(labels_pred)+1)):
 		res += k[i]*k[i]
 
 	Q = A/(2.0*m) - res/(4.0*m*m)        #modularity
