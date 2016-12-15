@@ -148,7 +148,7 @@ $d^{(t)}$ can be found according to formulas
     \end{aligned}
 \end{equation}
 where $g^{(t)}$ is a natural gradient of $\mathcal L(\theta)$.
-$\| \cdot \|$ stands for the norm with respect to Riemannian metrics
+$\| \cdot \|_\theta$ stands for the norm with respect to Riemannian metrics
 \begin{equation}
     \begin{aligned}
     \nonumber
@@ -191,13 +191,13 @@ The final algorithm is given in \ref{ncg_alg}.
 	Initialize $\theta$; \\
     $\mathcal L_{old} \leftarrow -\infty$; \\
     $\lambda \leftarrow 1$; \\
-    
+
     \For{$t$ in range ($t_{\max}$)}
     {
         Calculate $\tilde\Pi$ using \ref{pi}; \\
         Calculate $\tilde\alpha$, $\tilde\beta$ using \ref{alpha_beta}; \\
         Calculate $\mathcal L$ using \ref{L}; \\
-        
+
         \uIf{
                 $0 \leq \frac{\mathcal L - \mathcal L_{old}}{|\mathcal L|} < \eta$
             }
@@ -218,9 +218,9 @@ The final algorithm is given in \ref{ncg_alg}.
                 $\theta \leftarrow \theta_{old} + \lambda |\eta| d$ \\
             }
     }
-    
+
     $Z = \left( \arg\max\limits_{1\leq j \leq k} \tilde\pi_{1j}, \dots, \arg\max\limits_{1\leq j \leq k} \tilde\pi_{nj} \right)$
-    
+
     \Return $Z$	
 \end{algorithm}
 
