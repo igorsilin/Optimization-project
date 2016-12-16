@@ -37,8 +37,8 @@
 \newtheorem{prob}{Problem}
 \def\eqdef{\stackrel{def}{=}}
 
-% \DeclareMathOperator*{\argmin}{argmin} 
-% \DeclareMathOperator*{\Argmin}{Argmin} 
+% \DeclareMathOperator*{\argmin}{argmin}
+% \DeclareMathOperator*{\Argmin}{Argmin}
 % \DeclareMathOperator{\barcnt}{bar}
 % \DeclareMathOperator{\supp}{supp}
 % \DeclareMathOperator{\est}{\mathbb{E}}
@@ -53,7 +53,7 @@
 			{ Course project \\ <<Optimization approaches to community detection>>}
 	\author[M. Danilova, A. Podkopaev, N. Puchkin, I. Silin]{\large Marina Danilova, Alexander Podkopaev, Nikita Puchkin, Igor Silin}
 	\institute[Affiiation]{
-	\textsc{Skolkovo institute of science and technology} 
+	\textsc{Skolkovo institute of science and technology}
 	}
 
 \date{\footnotesize{December 16, 2016}}
@@ -97,7 +97,7 @@
 					\item \textbf{Undirected unweighted} graphs \textbf{without loops} with $n$ nodes and $m$ edges.
 					\item The nodes are enumerated as $\{ 1, ..., n\}$.\\
 					\item Graph is given by its $n \times n $ adjacency matrix $A$.
-					\item Degree of the node $i$ is $d_i$. 
+					\item Degree of the node $i$ is $d_i$.
 				\end{itemize}
 
 			\end{block}
@@ -137,7 +137,7 @@
 						\item \textbf{Modularity} is the difference between two previous fractions:
 								\begin{equation}
 									\begin{aligned}
-										Q(z) = 
+										Q(z) =
 										\frac{1}{2m} \sum\limits_{i,j=1}^{n} \left(a_{ij} - \frac{d_i\cdot d_j}{2m}\right) \cdot \mathbbm{1}\{ z(i) = z(j) \}.
 										\nonumber
 									\end{aligned}
@@ -160,7 +160,7 @@
 
 				\begin{block}{Greedy algorithm}
 						1. Initially every node forms its own cluster: $\mathcal{C}_i = \{ i \}$ and $Q = 0$.\\
-						2. Iteratively: 
+						2. Iteratively:
 							\begin{itemize}
 								\item choose two current clusters, joining of which gives maximal gain $\Delta Q$ of modularity.
 								\item unite these two current clusters into one and recalculate $Q := Q + \Delta Q$.
@@ -225,15 +225,15 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
 				\end{block}
 				
 				\begin{block}{Formulating an optimization problem}
-				Likelihood for special case of stochstic block model is 
-				\begin{equation} 
+				Likelihood for special case of stochstic block model is
+				\begin{equation}
 					\begin{aligned}
 						\mathcal{L}(X) = trace(AX).
 					\nonumber
 					\end{aligned}
 				\end{equation}
 				Maximum likelihood method:
-				\begin{equation} 
+				\begin{equation}
 					\begin{aligned}
 						&maximize\;\;\mathcal{L}(X)\\
 						&s.t. \;\;X \in \mathcal{X}
@@ -247,7 +247,7 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
 			\begin{frame}{Semidefinite relaxation method}
 				\begin{block}{Semidefinite relaxation}
 				We just relax $X \in \mathcal{X}$ and get semidefinite program:
-				\begin{equation} 
+				\begin{equation}
 					\begin{aligned}
 						&maximize\;\;trace(AX)\\
 						&s.t. \;\;X \text{ is positive semi-definite}, \\
@@ -257,7 +257,7 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
 					\nonumber
 					\end{aligned}
 				\end{equation}
-				where $e = (1,\ldots,1)^T$.\\ 
+				where $e = (1,\ldots,1)^T$.\\
 				\vspace{5pt}
 				This problem can be solved with SDP solvers implemented in cvx.
 				\end{block}
@@ -272,10 +272,10 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
                             \begin{aligned}
                             \nonumber
                                 & z(i) \sim \text{Poly}(\pi), \quad i=\overline{1, n} \\
-                                & P = \| p_{ij} \|_{i,j=\overline{1,k}} \text{ - probabilities of inter-cluster edges occurence} \\
+                                & P = \| p_{ij} \|_{i,j=\overline{1,k}} \text{ - probabilities of inter-cluster edges occurrence} \\
                             \end{aligned}
                         \end{equation}
-                
+
                     \item Bayesian approach:
                     \begin{equation}
                         \begin{aligned}
@@ -286,7 +286,7 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
                         \end{aligned}
                     \end{equation}
                     \item $p(z, \pi, P | A)$ - true posterior with observed adjacency matrix $A$
-                    \item $\mathcal Q$ - family of feasible distributions            
+                    \item $\mathcal Q$ - family of feasible distributions
                 \end{itemize}
 
 			\end{frame}
@@ -312,7 +312,7 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
                         \[
                             \mathcal I(\theta) - \text{Fischer information}
                         \]
-                \end{itemize}                
+                \end{itemize}
 			\end{frame}
 
 	\section{Experimental results}
@@ -341,4 +341,4 @@ NormCut(\mathcal{C}_1,\dots,\mathcal{C}_k)= \sum \limits_{i=1}^k \frac{cut(\math
 			\centering{ \LARGE Thanks for your attention!}
 		\end{frame}
 
-\end{document}
+\end{document} 
