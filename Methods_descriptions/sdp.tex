@@ -1,0 +1,43 @@
+%\numberwithin{equation}{subsection}
+
+In this method it's very convenient to introduce clustering matrix $X$ of size $n\times n$ with $x_{ij} = \mathbbm{1}\{ z(i) = z(j) \}$.
+We denote space of all matices with such structure as $\mathcal{X}$.
+                
+Next we want to formulate an optimization problem.
+We consider likelihood for special case of stochstic block model:
+\begin{equation}
+    \begin{aligned}
+        \mathcal{L}(X) = trace(AX).
+    \nonumber
+    \end{aligned}
+\end{equation}
+Then we write maximum likelihood method:
+\begin{equation}
+    \begin{aligned}
+    &maximize\;\;\mathcal{L}(X)\\
+    &s.t. \;\;X \in \mathcal{X}
+    \nonumber
+    \end{aligned}
+\end{equation}
+This problem is NP-hard combinatorial optimization problem. The idea is to relax constraints.
+So, we just relax $X \in \mathcal{X}$ and get semidefinite program:
+\begin{equation}
+    \begin{aligned}
+    &maximize\;\;trace(AX)\\
+    &s.t. \;\;X \text{ is positive semi-definite}, \\
+    &\;\;\;\;\;\;\; X \geq 0, \\
+    &\;\;\;\;\;\;\; diagonal(X) = e, \\
+    &\;\;\;\;\;\;\; Xe = \frac{n}{k}e,
+    \nonumber
+    \end{aligned}
+\end{equation}
+where $e = (1,\ldots,1)^T$.
+And finally we solve this problem with SDP solvers implemented in cvx. We call this formulation ''SDP1''.
+
+In the experiments we will consider one more possible semidefinite relaxation, but not so tight one. We call it ''SDP2''.
+
+\begin{equation}
+    \begin{aligned}
+    \nonumber
+    \end{aligned}
+\end{equation}

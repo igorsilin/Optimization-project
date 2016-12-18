@@ -85,34 +85,54 @@ Sometimes it's convenient to describe cluster structure in terms of labeling $z$
 \section{Algorithms}
 	
 	\subsection{Semidefinite relaxations}
+		\input{Methods_descriptions/sdp}
 	\subsection{Natural conjugate gradients method}
-		\input{ncg}
+		\input{Methods_descriptions/ncg}
 	\subsection{Modularity-based methods}
-		\input{modularity}
+		\input{Methods_descriptions/modularity}
 	\subsection{Spectral method}
-		\input{spectral_cl}
+		\input{Methods_descriptions/spectral_cl}
 		
 \section{Data}
 
 	In our experiments we consider standard real-world graphs that are often used for testing community detection algorithms, such as ''Zachary's karate club'', ''American college football'', ''Books about US politics''. For this graphs we know true clusters. The description of these graphs can be found in internet.
 
-	We have generated several artificial graphs using stochastic block model as well.
+	Also we have generated an artificial graph using stochastic block model.
 
 \section{Experimental results}
-	We launch all described algorithms on our graphs and compare their performance using different metrics, such as: NMI, F1-score, Ratio cut, Modularity.
+	We launch all described algorithms on our graphs and compare their performance using different metrics, namely: NMI, Recall, Precision, F1-score, Normalized cut, Modularity.
+	The higher this metrics, the better (except for normalized cut). We can also mention that NMI, Recall, Precision, F1-score are based on comparison of predicted clustering with ground-truth clustering (the value $1.0$ corresponds to perfect matching), while Normalized cut and Modularity mesures the quality of obtained partition and don't require true labels.
+
+	The results are presented in ''Experiment.ipynb''. It's difficult to determine the best algorithm, because the results depend on graph and quality metric very much.
 
 
 \section{Work split}
 
+Marina Danilova has studied the article about SDP and has implemented corresponding functions in ''Lib/SDP.py''. 
+Also she prepared the section in this report and slides for presentation about this method.
+
+Alexander Podkopaev has studied the article about spectral clustering and has implemented corresponding functions in ''Lib/MinCut.py''.
+Also he prepared the section in this report and slides for presentation about this method.
+
+Nikita Puchkin has studied the article about natural conjugate gradient method and has implemented corresponding functions in ''Lib/NCG.py''.
+Also he prepared the section in this report and slides for presentation about this method. ''Experiment.ipynb'' and slides with experimental part were prepared by him as well.
+
+Igor Silin has studied the article about greedy modularity-based method and has implemented corresponding functions in ''Lib/modularity.py''.
+Also he prepared the section in this report and slides for presentation about this method. Part ''Introduction to community detection'' in this report and in presentation  was prepared by him as well, as well as auxilary code for loading and processing graphs, computing quality metrics and othe technical functions progeammed in ''Lib/Load.py'', ''Lib/Metrics.py'', ''Lib/Transformations.py''.
+
+
+
 
 \renewcommand{\refname}{References}
 \begin{thebibliography}{9}
+	\bibitem{sdp}
+	On semidefinite relaxations for the block model, Arash A. Amini and Elizaveta Levina, 2016.
     \bibitem{ncg}
-    A fast inference algorithm for stochastic blockmodel, Zhiqiang Xu, Yiping Ke, Yi Wang, 2014. \\
+    A fast inference algorithm for stochastic blockmodel, Zhiqiang Xu, Yiping Ke, Yi Wang, 2014.
     \bibitem{modularity}
-    Fast algorithm for detecting community structure in networks, M.E.J.Newman, 2003.\\
+    Fast algorithm for detecting community structure in networks, M.E.J.Newman, 2003.
     \bibitem{spectral}
-    A Tutorial on Spectral Clustering, Ulrike von Luxburg, 2007.\\
+    A Tutorial on Spectral Clustering, Ulrike von Luxburg, 2007.
 \end{thebibliography}
 
 \end{document}
