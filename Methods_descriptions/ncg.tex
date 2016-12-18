@@ -1,21 +1,20 @@
 
-\numberwithin{equation}{subsection}
-It is assumed, that latent group labels $Z$ has a multinomial distribution with parameter $\pi$
-and each element of $A$ has a Bernoulli distribution with parameter $\theta_{ij}$:
+It is assumed, that each component of labelling $z$ has a polynomial distribution with parameter $\pi$
+and each element of $A$ has a Bernoulli distribution with parameter $P_{z(i)z(j)}$:
 
 \begin{equation}
     \begin{aligned}
     \nonumber
-        & Z_i \sim \text{Poly}(\pi), \quad \pi^T = (\pi_{1}, \dots, \pi_{k}), \\
-        & a_{ij} \sim \text{Bernoulli}(P_{Z(i)Z(j)}), \quad i,j = \overline{1, n}, \\
+        & z_i \sim \text{Poly}(\pi), \quad \pi^T = (\pi_{1}, \dots, \pi_{k}), \\
+        & a_{ij} \sim \text{Bernoulli}(P_{z(i)z(j)}), \quad i,j = \overline{1, n}, \\
     \end{aligned}
 \end{equation}
-A Bayesian approach is used to estimate the most probable configuration of $Z$ given an adjacency matrix $A$
+A Bayesian approach is used to estimate the most probable configuration of $z$ given an adjacency matrix $A$
 
 \begin{equation}
     \begin{aligned}
     \label{maxz}
-    Z^* = \arg\max\limits_Z p(Z | A) = \arg\max\limits_Z \iint p(Z, \pi, P | A) d\pi dP
+    z^* = \arg\max\limits_z p(z | A) = \arg\max\limits_z \iint p(z, \pi, P | A) d\pi dP
     \end{aligned}
 \end{equation}
 It treats parameters $\pi$ and $\theta_{ij}$ as random variables with following prior distributions
@@ -34,32 +33,32 @@ Futhermore, to tackle the intractable integration in \ref{maxz} a restriction on
 \begin{equation}
     \begin{aligned}
     \nonumber
-    \mathcal Q = \{q:\, q(Z, \pi, P) = q(\pi)q(P) \prod\limits_i q(Z_i) \},
+    \mathcal Q = \{q:\, q(z, \pi, P) = q(\pi)q(P) \prod\limits_i q(z_i) \},
     \end{aligned}
 \end{equation}
 where
 \begin{equation}
     \begin{aligned}
     \nonumber
-    & q(Z_i): Z_i \sim \text{Poly}(\tilde \pi) \\
+    & q(z_i): z_i \sim \text{Poly}(\tilde \pi) \\
     & q(\pi): \pi \sim \text{Dirichlet}(\tilde \alpha) \\
     & q(P): P_{ii} \sim \text{Beta}(\tilde\beta_i)
     \end{aligned}
 \end{equation}
 
-The optimal distribution $q^* \in \mathcal Q$, that approximates the true posterior $p(Z, \pi, P | A)$ minimizes the Kullback-Leibler divergence
+The optimal distribution $q^* \in \mathcal Q$, that approximates the true posterior $p(z, \pi, P | A)$ minimizes the Kullback-Leibler divergence
 
 \begin{equation}
     \begin{aligned}
     \label{minq}
-    q^* = \arg\min\limits_{q \in \mathcal Q} \text{KL} \left( q \| p(Z, \pi, P | X) \right)
+    q^* = \arg\min\limits_{q \in \mathcal Q} \text{KL} \left( q \| p(z, \pi, P | X) \right)
     \end{aligned}
 \end{equation}
 
 Define
 \begin{equation}
     \begin{aligned}
-    \mathcal L(q) = \sum\limits_Z \iint q(Z, \pi, P) \log \frac{p(A, Z, \pi, P)}{q(Z, \pi, P)} d\pi dP
+    \mathcal L(q) = \sum\limits_z \iint q(z, \pi, P) \log \frac{p(A, z, \pi, P)}{q(z, \pi, P)} d\pi dP
     \end{aligned}
 \end{equation}
 Since
@@ -67,7 +66,7 @@ Since
 \begin{equation}
     \begin{aligned}
     \nonumber
-    \mathcal L(q) + \text{KL} \left( q \| p(Z, \pi, P | X) \right) = \log p(A)
+    \mathcal L(q) + \text{KL} \left( q \| p(z, \pi, P | X) \right) = \log p(A)
     \end{aligned}
 \end{equation}
 the minimization problem \ref{minq} can be equivalently solved by maximizing $\mathcal L(q)$
@@ -155,7 +154,7 @@ $\| \cdot \|_\theta$ stands for the norm with respect to Riemannian metrics
     G(\theta) = \text{diag} \left( \mathcal I(\theta_1), \dots, \mathcal I(\theta_N) \right),
     \end{aligned}
 \end{equation}
-where $\theta_i = (\theta_{i1}, \dots, \theta_{ik})^T$, $i = \overline{1, n}$ and $\mathcal(\theta_i)$ is a Fischer information.
+where $\theta_i = (\theta_{i1}, \dots, \theta_{i,k-1})^T$, $i = \overline{1, n}$ and $\mathcal I(\theta_i)$ is a Fischer information.
 This method is nothing else but a conjugate gradient method in a Riemannian space with metrics $G(\theta)$.
 Given $\theta$, $g$ and $\|g\|_\theta$ can be found as follows
 \begin{equation}
@@ -186,8 +185,8 @@ The final algorithm is given in \ref{ncg_alg}.
     \label{ncg_alg}
 	\SetAlgoLined
 
-	\KwIn{adjacency matrix $A$, maximum number of clusters $k$, tolerance $\eta$, maximum number of iterations $t_{\max}$} %% здесь можно указать исходные параметры
-	\KwOut{array of predicted labels Z} %% результат работы программы
+	\KwIn{adjacency matrix $A$, maximum number of clusters $k$, tolerance $\eta$, maximum number of iterations $t_{\max}$}
+	\KwOut{array of predicted labels Z}
 	Initialize $\theta$; \\
     $\mathcal L_{old} \leftarrow -\infty$; \\
     $\lambda \leftarrow 1$; \\
@@ -224,13 +223,7 @@ The final algorithm is given in \ref{ncg_alg}.
     \Return $Z$	
 \end{algorithm}
 
-Initial value of $\theta$ was generated from a standart normal distribution $\mathcal N(0, 1)$.
-Probability of occurence an inter-cluster edge $\varepsilon$ was set to $10^{-10}$.
+Initial value of $\theta$ was generated from a standard normal distribution $\mathcal N(0, 1)$.
+Probability of occurrence an inter-cluster edge $\varepsilon$ was set to $10^{-10}$.
 The maximal number of iterations and relative tolerance were taken equal to $100$ and $10^{-6}$ respectively.
 Examples of performance of the natural conjugate gradient method can be found, for example, in \cite{ncg}.
-
-\begin{equation}
-    \begin{aligned}
-    \nonumber
-    \end{aligned}
-\end{equation}
