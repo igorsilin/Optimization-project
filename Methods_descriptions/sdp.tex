@@ -2,9 +2,9 @@
 
 In this method it's very convenient to introduce clustering matrix $X$ of size $n\times n$ with $x_{ij} = \mathbbm{1}\{ z(i) = z(j) \}$.
 We denote space of all matices with such structure as $\mathcal{X}$.
-                
+
 Next we want to formulate an optimization problem.
-We consider likelihood for special case of stochstic block model:
+We consider likelihood for special case of stochastic block model:
 \begin{equation}
     \begin{aligned}
         \mathcal{L}(X) = trace(AX).
@@ -20,6 +20,18 @@ Then we write maximum likelihood method:
     \end{aligned}
 \end{equation}
 This problem is NP-hard combinatorial optimization problem. The idea is to relax constraints.
+Now we discuss some properties of the matrix $X$.
+Introduce a $n\times k$ matrix $Z$, where $Z_{ij} = 1$ if the $i$\/-th node belongs to the $j$\/-th cluster, and $Z_{ij} = 0$ otherwise.
+Since
+\begin{equation}
+    \begin{aligned}
+    \left( ZZ^T \right)_{ij} = \sum\limits_{l=1}^k \mathbb I\left(z(i) = l \right) \mathbb I\left(z(j) = l \right) = \sum\limits_{l=1}^k \mathbb I\left(z(i) = z(j) = l \right) = \mathbb I \left( z(i) = z(j) \right) = X_{ij}
+    \nonumber
+    \end{aligned}
+\end{equation}
+it holds $X = ZZ^T$ and, consequently, $X$ is a positive semidefinite matrix.
+Next, it is clear, that each diagonal element of $X$ is equal to 1.
+Finally, each row of $X$ should sum to $\frac nk$, i.e. $Xe = \frac{n}{k}e$, where $e = (1,\ldots,1)^T$.
 So, we just relax $X \in \mathcal{X}$ and get semidefinite program:
 \begin{equation}
     \begin{aligned}
@@ -31,10 +43,20 @@ So, we just relax $X \in \mathcal{X}$ and get semidefinite program:
     \nonumber
     \end{aligned}
 \end{equation}
-where $e = (1,\ldots,1)^T$.
 And finally we solve this problem with SDP solvers implemented in cvx. We call this formulation ''SDP1''.
 
 In the experiments we will consider one more possible semidefinite relaxation, but not so tight one. We call it ''SDP2''.
+\begin{equation}
+    \begin{aligned}
+    &maximize\;\;trace(AX)\\
+    &s.t. \;\;X \text{ is positive semi-definite}, \\
+    &\;\;\;\;\;\;\; 0 \leq X \leq 1, \\
+    &\;\;\;\;\;\;\; \text{trace}(X) = n, \\
+    &\;\;\;\;\;\;\; \text{trace}(EX) = \frac{n^2}k,
+    \nonumber
+    \end{aligned}
+\end{equation}
+where $E$ is a $n\times n$ matrix of ones.
 
 \begin{equation}
     \begin{aligned}
