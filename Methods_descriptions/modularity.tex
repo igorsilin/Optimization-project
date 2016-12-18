@@ -69,7 +69,7 @@ All other elements don't change. Hence, according to our formula for modularity 
 \end{equation}
 If we keep and recalculate all $e$ and $b$ during the iterations, we can determine pair of current clusters that gives maximal $\Delta Q$ effectively, since for any possible pair calculating $\Delta Q$ takes constant time (actually, more advanced approaches for more effective search of such pair were developed, e.g. one can use heap structure). So, we choose two clusters that we want to unite and unite them. We also have the value of modularity for current clustering. We also need to recalculate $e$ and $b$ as shown above.
 
-One can consider this sequential uniting of clusters as the process of building a dendrogarm, which is a tree, that shows in which order cluster were joined.
+One can consider this sequential uniting of clusters as the process of building a dendrogram, which is a tree, that shows in which order cluster were joined.
 
 After we did $(n-1)$ iterations, we have one cluster that contains all nodes. So as a final clustering we need to choose clustering from iteration $t$ with the maximal modularity $Q^{(t)}$.
 
